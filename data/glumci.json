@@ -1,0 +1,63 @@
+[
+    {
+        
+      "name": "Catherine Missal",
+      "rating": 4875,
+      "image_path": "/g3fsRgEoMxaqPayIMtGDWERqJ6A.jpg",
+      "alternative_name": null,
+      "objectID": "551486300",
+      "movies":["Vacation","Movement and Location","Natural Selection","Vijay And I"],
+      "awards":"Best Young Ensemble Cast"
+    },
+    {
+      
+      "name": "Monica Bellucci",
+      "rating": 3956,
+      "image_path": "/z3sLuRKP7hQVrvSTsqdLjGSldwG.jpg",
+      "alternative_name": "Monica Anna Maria Bellucci",
+      "objectID": "551486310",
+      "movies":["Malena","Irreversible","Spectre","The Matrix Reloaded"],
+      "awards":"European Nastro d'Argento"
+    },
+    {
+      
+      "name": "Michael Doven",
+      "rating": 2647,
+      "image_path": "/fkHxoBAvAkqHxzoP1ukcbPnaaUi.jpg",
+      "alternative_name": null,
+      "objectID": "551486320",
+      "movies":["In Search of Fellini","The Squeeze","Durant's Never Closes","Eyes Wide Shut"],
+      "awards":"Best Feature USA In Search of Fellini"
+    },
+    {
+      
+      "name": "Jasmine Reate",
+      "rating": 2378,
+      "image_path": "/qgI4agu15xBlnWkZEVpZhGFsV4Y.jpg",
+      "alternative_name": "J.L. Reate",
+      "objectID": "551486330",
+      "movies":["The Golden Child","Imagine That","Ghostbusters","Doctor Dolittle"],
+      "awards":"Best Young Actress in a Motion Picture - Drama"
+    },
+    {
+      
+      "name": "Tom Cruise",
+      "rating": 2237,
+      "image_path": "/3oWEuo0e8Nx8JvkqYCDec2iMY6K.jpg",
+      "alternative_name": null,
+      "objectID": "551486340",
+      "movies":["Top Gun","Mission Impossible","Jack Reacher","The Mummy"],
+      "awards":"Golden Globe Award for Best Supporting Actor – Motion Picture"
+    },
+    {
+      
+      "name": "Scarlett Johansson",
+      "rating": 2128,
+      "image_path": "/f3c1rwcOoeU0v6Ak5loUvMyifR0.jpg",
+      "alternative_name": "Scarlett Johanssen",
+      "objectID": "551486350",
+      "movies":["Black Widow","Ghost in the Shell","Lucy","Iron Man 2"],
+      "awards":"Honorary César"
+
+    }
+]
