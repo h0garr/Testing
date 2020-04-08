@@ -1,14 +1,23 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-const Filmovi = require('../controllers/filmovi')
+const Filmovi = require("../controllers/filmovi");
 
-const { vratiSveFilmove, vratiFilmovePoNazivu, vratiOpisFilma, vratiPosterFilma} = Filmovi
+const {
+  vratiSveFilmove,
+  vratiFilmovePoNazivu,
+  vratiOpisFilma,
+  dodajFilm,
+  izbrisiFilm,
+  azurirajFilm,
+} = Filmovi;
 
-router.get('/', vratiSveFilmove)
-router.get('/:naziv', vratiFilmovePoNazivu)
-router.get('/:naziv/opis', vratiOpisFilma)
-router.get('/:naziv/posteri', vratiPosterFilma)
+router.route("/").get(vratiSveFilmove).post(dodajFilm);
+router
+  .route("/:id")
+  .get(vratiFilmovePoNazivu)
+  .delete(izbrisiFilm)
+  .patch(azurirajFilm);
+router.get("/:id/opis", vratiOpisFilma);
 
-
-module.exports = router
+module.exports = router;

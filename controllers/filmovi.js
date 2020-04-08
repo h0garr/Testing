@@ -1,4 +1,5 @@
 const sviFilmovi = require("../data/filmovi.json");
+const Joi = require("joi");
 const Film = require("../models/film");
 const sortFilmove = (a, b, value) => {
   if (a[value] < b[value]) {
@@ -73,29 +74,47 @@ const vratiOpisFilma = async (req, res, next) => {
   res.status(200).send(reply);
 };
 
-const vratiPosterFilma = async (req, res, next) => {
-  let naziv = req.params.naziv;
-  let reply;
-  for (let i = 0; i < sviFilmovi.length; i++) {
-    let obj = sviFilmovi[i];
-    console.log(obj.title, naziv);
-    if (obj.title === naziv) {
-      reply = {
-        status: "found",
-        title: naziv,
-        posterURL: obj.posterUrl,
-      };
-      break;
-    } else {
-      reply = { status: "not found" };
-    }
+const dodajFilm = async (req, res, next) => {
+  const schema = Joi.object({
+    title: Joi.string().required(),
+    plot: Joi.string().required(),
+    year: Joi.number().required(),
+    rating: Joi.number().required(),
+  });
+  console.log(req.body);
+  const result = schema.validate(req.body);
+  console.log(result);
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+    return;
   }
-  res.status(200).send(reply);
+  const film = {
+    title: req.body.title,
+    plot: req.body.plot,
+    rating: req.body.rating,
+    year: req.body.year,
+  };
+  const movie = new Film(film);
+  const save = await movie.save();
+  res.status(201).send({ message: "Film je sacuvan", film: save });
+};
+const izbrisiFilm = async (req, res, next) => {
+  const { id } = req.params;
+  await Film.findByIdAndDelete(id);
+  res.status(200).send({ msg: "Film je izbrisan" });
+};
+const azurirajFilm = async (req, res, next) => {
+  const { id } = req.params;
+  const update = req.body;
+  await Film.findByIdAndUpdate(id, update);
+  res.status(200).send({ msg: "Film je azuriran" });
 };
 
 module.exports = {
   vratiSveFilmove,
   vratiFilmovePoNazivu,
   vratiOpisFilma,
-  vratiPosterFilma,
+  dodajFilm,
+  izbrisiFilm,
+  azurirajFilm,
 };
