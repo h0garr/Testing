@@ -1,4 +1,5 @@
 const sviGlumci = require("../data/glumci.json");
+const Joi = require("joi");
 const Glumac = require("../models/glumac");
 const vratiSveGlumce = async (req, res, next) => {
   const Glumci = await Glumac.find({});
@@ -57,10 +58,46 @@ const vratiFilmoveGlumca = async (req, res, next) => {
   }
   res.status(200).send(reply);
 };
+const dodajGlumca = async (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    rating: Joi.number().required(),
+    awards: Joi.string(),
+  });
+  console.log(req.body);
+  const result = schema.validate(req.body);
+  console.log(result);
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  const glumac = {
+    name: req.body.name,
+    rating: req.body.rating,
+    awards: req.body.awards,
+  };
+  const actor = new Glumac(glumac);
+  const save = await actor.save();
+  res.status(201).send({ message: "Glumac je sacuvan", glumac: save });
+};
+const izbrisiGlumca = async (req, res, next) => {
+  const { id } = req.params;
+  await Glumac.findByIdAndDelete(id);
+  res.status(200).send({ msg: "glumac je izbrisan" });
+};
+const azurirajGlumca = async (req, res, next) => {
+  const { id } = req.params;
+  const update = req.body;
+  await Glumac.findByIdAndUpdate(id, update);
+  res.status(200).send({ msg: "Glumac je azuriran" });
+};
 
 module.exports = {
   vratiSveGlumce,
   vratiGlumcaPoImenuIPrezimenu,
   vratiNagradeGlumca,
   vratiFilmoveGlumca,
+  dodajGlumca,
+  izbrisiGlumca,
+  azurirajGlumca,
 };

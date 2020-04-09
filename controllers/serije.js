@@ -57,10 +57,46 @@ const vratiEpizodeSerije = async (req, res, next) => {
   }
   res.status(200).send(reply);
 };
+const dodajSeriju = async (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    plot: Joi.string().required(),
+    episodes: Joi.number().required(),
+  });
+  console.log(req.body);
+  const result = schema.validate(req.body);
+  console.log(result);
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+    return;
+  }
+  const serija = {
+    name: req.body.name,
+    plot: req.body.plot,
+    episodes: req.body.episodes,
+  };
+  const tvshow = new Serija(serija);
+  const save = await tvshow.save();
+  res.status(201).send({ message: "Serija je sacuvana", serija: save });
+};
+const izbrisiSeriju = async (req, res, next) => {
+  const { id } = req.params;
+  await Serija.findByIdAndDelete(id);
+  res.status(200).send({ msg: "Serija je izbrisana" });
+};
+const azurirajSeriju = async (req, res, next) => {
+  const { id } = req.params;
+  const update = req.body;
+  await Serija.findByIdAndUpdate(id, update);
+  res.status(200).send({ msg: "Serija je azurirana" });
+};
 
 module.exports = {
   vratiSveSerije,
   vratiSerijuPoNazivu,
   vratiOpisSerije,
   vratiEpizodeSerije,
+  dodajSeriju,
+  izbrisiSeriju,
+  azurirajSeriju,
 };
