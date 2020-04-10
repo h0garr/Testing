@@ -6,54 +6,36 @@ const vratiSveSerije = async (req, res, next) => {
 };
 
 const vratiSerijuPoNazivu = async (req, res, next) => {
-  const { naziv } = req.params;
-  const serija = Serija.filter((serija) =>
-    new RegExp(naziv, "i").exec(serija.name)
-  );
-  if (serija.length === 0) {
-    res.status(200).send({ err: "Doslo je do greske" });
-  } else {
-    res.status(200).send({ serija });
-  }
+  const { id } = req.params;
+  const serija = Serija.findById(id);
+  res.status(200).send({ serija });
 };
 
 const vratiOpisSerije = async (req, res, next) => {
-  let naziv = req.params.naziv;
+  let id = req.params.id;
   let reply;
-  for (let i = 0; i < Serija.length; i++) {
-    let obj = Serija[i];
-    console.log(obj.name, naziv);
-    if (obj.name === naziv) {
-      reply = {
-        status: "found",
-        title: naziv,
-        desc: obj.plot,
-      };
-      break;
-    } else {
-      reply = { status: "not found" };
-    }
-  }
+  const serija = await Serija.findById(id);
+  const plot = serija.plot;
+
+  reply = {
+    status: "found",
+    title: serija.title,
+    plot: plot,
+  };
   res.status(200).send(reply);
 };
 
 const vratiEpizodeSerije = async (req, res, next) => {
-  let naziv = req.params.naziv;
+  let id = req.params.id;
   let reply;
-  for (let i = 0; i < Serija.length; i++) {
-    let obj = Serija[i];
-    console.log(obj.name, naziv);
-    if (obj.name === naziv) {
-      reply = {
-        status: "found",
-        title: naziv,
-        episodes: obj.episodes,
-      };
-      break;
-    } else {
-      reply = { status: "not found" };
-    }
-  }
+  const serija = await Serija.findById(id);
+  const episodes = serija.episodes;
+
+  reply = {
+    status: "found",
+    title: serija.title,
+    episodes: episodes,
+  };
   res.status(200).send(reply);
 };
 const dodajSeriju = async (req, res, next) => {

@@ -7,54 +7,36 @@ const vratiSveGlumce = async (req, res, next) => {
 };
 
 const vratiGlumcaPoImenuIPrezimenu = async (req, res, next) => {
-  const { imePrezime } = req.params;
-  const glumac = Glumac.filter((glumac) =>
-    new RegExp(imePrezime, "i").exec(glumac.name)
-  );
-  if (glumac.length === 0) {
-    res.status(200).send({ err: "Doslo je do greske" });
-  } else {
-    res.status(200).send({ glumac });
-  }
+  const { id } = req.params;
+  const glumac = Glumac.findById(id);
+  res.status(200).send({ glumac });
 };
 
 const vratiNagradeGlumca = async (req, res, next) => {
-  let imePrezime = req.params.imePrezime;
+  let id = req.params.id;
   let reply;
-  for (let i = 0; i < Glumac.length; i++) {
-    let obj = Glumac[i];
-    console.log(obj.name, imePrezime);
-    if (obj.name === imePrezime) {
-      reply = {
-        status: "found",
-        name: imePrezime,
-        awards: obj.awards,
-      };
-      break;
-    } else {
-      reply = { status: "not found" };
-    }
-  }
+  const glumac = await Glumac.findById(id);
+  const awards = glumac.awards;
+
+  reply = {
+    status: "found",
+    name: glumac.name,
+    awards: awards,
+  };
   res.status(200).send(reply);
 };
 
 const vratiFilmoveGlumca = async (req, res, next) => {
-  let imePrezime = req.params.imePrezime;
+  let id = req.params.id;
   let reply;
-  for (let i = 0; i < Glumac.length; i++) {
-    let obj = Glumac[i];
-    console.log(obj.name, imePrezime);
-    if (obj.name === imePrezime) {
-      reply = {
-        status: "found",
-        name: imePrezime,
-        movies: obj.movies,
-      };
-      break;
-    } else {
-      reply = { status: "not found" };
-    }
-  }
+  const glumac = await Glumac.findById(id);
+  const movies = glumac.movies;
+
+  reply = {
+    status: "found",
+    name: glumac.name,
+    movies: movies,
+  };
   res.status(200).send(reply);
 };
 const dodajGlumca = async (req, res, next) => {

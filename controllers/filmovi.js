@@ -12,24 +12,25 @@ const sortFilmove = (a, b, value) => {
 const vratiSveFilmove = async (req, res, next) => {
   let sort = req.query.sort;
   let order = req.query.order;
+  const film = await Film.find({});
   switch (order) {
     case "asc":
       if (sort === "godina") {
-        film = Film.sort((a, b) => sortFilmove(a, b, "year"));
+        film = film.sort((a, b) => sortFilmove(a, b, "year"));
         res.status(200).send({ film });
       }
       if (sort === "rating") {
-        film = Film.sort((a, b) => sortFilmove(a, b, "rating"));
+        film = film.sort((a, b) => sortFilmove(a, b, "rating"));
         res.status(200).send({ film });
       }
       break;
     case "desc":
       if (sort === "godina") {
-        film = Film.sort((a, b) => sortFilmove(a, b, "year")).reverse();
+        film = film.sort((a, b) => sortFilmove(a, b, "year")).reverse();
         res.status(200).send({ film });
       }
       if (sort === "rating") {
-        film = Film.sort((a, b) => sortFilmove(a, b, "rating")).reverse();
+        film = film.sort((a, b) => sortFilmove(a, b, "rating")).reverse();
         res.status(200).send({ film });
       }
       break;
@@ -43,31 +44,22 @@ const vratiSveFilmove = async (req, res, next) => {
 
 const vratiFilmovePoNazivu = async (req, res, next) => {
   const { id } = req.params;
-  const film = Film.filter((film) => new RegExp(id, "i").exec(film.title));
-  if (film.length === 0) {
-    res.status(200).send({ err: "Doslo je do greske" });
-  } else {
-    res.status(200).send({ film });
-  }
+  const film = await Film.findById(id);
+  res.status(200).send({ film });
 };
 
 const vratiOpisFilma = async (req, res, next) => {
   let id = req.params.id;
+  const film = await Film.findById(id);
+  const plot = film.plot;
   let reply;
-  for (let i = 0; i < Film.length; i++) {
-    let obj = Film.find(i);
-    console.log(obj.id, id);
-    if (obj.findById(id)) {
-      reply = {
-        status: "found",
-        title: obj.title,
-        desc: obj.plot,
-      };
-      break;
-    } else {
-      reply = { status: "not found" };
-    }
-  }
+
+  reply = {
+    status: "found",
+    title: film.title,
+    plot: plot,
+  };
+
   res.status(200).send(reply);
 };
 
