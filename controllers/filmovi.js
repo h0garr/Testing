@@ -1,4 +1,3 @@
-const sviFilmovi = require("../data/filmovi.json");
 const Joi = require("joi");
 const Film = require("../models/film");
 const sortFilmove = (a, b, value) => {
@@ -16,21 +15,21 @@ const vratiSveFilmove = async (req, res, next) => {
   switch (order) {
     case "asc":
       if (sort === "godina") {
-        film = sviFilmovi.sort((a, b) => sortFilmove(a, b, "year"));
+        film = Film.sort((a, b) => sortFilmove(a, b, "year"));
         res.status(200).send({ film });
       }
       if (sort === "rating") {
-        film = sviFilmovi.sort((a, b) => sortFilmove(a, b, "rating"));
+        film = Film.sort((a, b) => sortFilmove(a, b, "rating"));
         res.status(200).send({ film });
       }
       break;
     case "desc":
       if (sort === "godina") {
-        film = sviFilmovi.sort((a, b) => sortFilmove(a, b, "year")).reverse();
+        film = Film.sort((a, b) => sortFilmove(a, b, "year")).reverse();
         res.status(200).send({ film });
       }
       if (sort === "rating") {
-        film = sviFilmovi.sort((a, b) => sortFilmove(a, b, "rating")).reverse();
+        film = Film.sort((a, b) => sortFilmove(a, b, "rating")).reverse();
         res.status(200).send({ film });
       }
       break;
@@ -43,10 +42,8 @@ const vratiSveFilmove = async (req, res, next) => {
 };
 
 const vratiFilmovePoNazivu = async (req, res, next) => {
-  const { naziv } = req.params;
-  const film = sviFilmovi.filter((film) =>
-    new RegExp(naziv, "i").exec(film.title)
-  );
+  const { id } = req.params;
+  const film = Film.filter((film) => new RegExp(id, "i").exec(film.title));
   if (film.length === 0) {
     res.status(200).send({ err: "Doslo je do greske" });
   } else {
@@ -55,15 +52,15 @@ const vratiFilmovePoNazivu = async (req, res, next) => {
 };
 
 const vratiOpisFilma = async (req, res, next) => {
-  let naziv = req.params.naziv;
+  let id = req.params.id;
   let reply;
-  for (let i = 0; i < sviFilmovi.length; i++) {
-    let obj = sviFilmovi[i];
-    console.log(obj.title, naziv);
-    if (obj.title === naziv) {
+  for (let i = 0; i < Film.length; i++) {
+    let obj = Film.find(i);
+    console.log(obj.id, id);
+    if (obj.findById(id)) {
       reply = {
         status: "found",
-        title: naziv,
+        title: obj.title,
         desc: obj.plot,
       };
       break;
@@ -75,19 +72,6 @@ const vratiOpisFilma = async (req, res, next) => {
 };
 
 const dodajFilm = async (req, res, next) => {
-  const schema = Joi.object({
-    title: Joi.string().required(),
-    plot: Joi.string().required(),
-    year: Joi.number().required(),
-    rating: Joi.number().required(),
-  });
-  console.log(req.body);
-  const result = schema.validate(req.body);
-  console.log(result);
-  if (result.error) {
-    res.status(400).send(result.error.details[0].message);
-    return;
-  }
   const film = {
     title: req.body.title,
     plot: req.body.plot,

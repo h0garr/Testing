@@ -1,4 +1,3 @@
-const sviGlumci = require("../data/glumci.json");
 const Joi = require("joi");
 const Glumac = require("../models/glumac");
 const vratiSveGlumce = async (req, res, next) => {
@@ -9,7 +8,7 @@ const vratiSveGlumce = async (req, res, next) => {
 
 const vratiGlumcaPoImenuIPrezimenu = async (req, res, next) => {
   const { imePrezime } = req.params;
-  const glumac = sviGlumci.filter((glumac) =>
+  const glumac = Glumac.filter((glumac) =>
     new RegExp(imePrezime, "i").exec(glumac.name)
   );
   if (glumac.length === 0) {
@@ -22,8 +21,8 @@ const vratiGlumcaPoImenuIPrezimenu = async (req, res, next) => {
 const vratiNagradeGlumca = async (req, res, next) => {
   let imePrezime = req.params.imePrezime;
   let reply;
-  for (let i = 0; i < sviGlumci.length; i++) {
-    let obj = sviGlumci[i];
+  for (let i = 0; i < Glumac.length; i++) {
+    let obj = Glumac[i];
     console.log(obj.name, imePrezime);
     if (obj.name === imePrezime) {
       reply = {
@@ -42,8 +41,8 @@ const vratiNagradeGlumca = async (req, res, next) => {
 const vratiFilmoveGlumca = async (req, res, next) => {
   let imePrezime = req.params.imePrezime;
   let reply;
-  for (let i = 0; i < sviGlumci.length; i++) {
-    let obj = sviGlumci[i];
+  for (let i = 0; i < Glumac.length; i++) {
+    let obj = Glumac[i];
     console.log(obj.name, imePrezime);
     if (obj.name === imePrezime) {
       reply = {
@@ -59,21 +58,11 @@ const vratiFilmoveGlumca = async (req, res, next) => {
   res.status(200).send(reply);
 };
 const dodajGlumca = async (req, res, next) => {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    rating: Joi.number().required(),
-    awards: Joi.string(),
-  });
-  console.log(req.body);
-  const result = schema.validate(req.body);
-  console.log(result);
-  if (result.error) {
-    res.status(400).send(result.error.details[0].message);
-    return;
-  }
   const glumac = {
     name: req.body.name,
+    age: req.body.age,
     rating: req.body.rating,
+    movies: req.body.movies,
     awards: req.body.awards,
   };
   const actor = new Glumac(glumac);

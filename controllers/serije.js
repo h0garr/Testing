@@ -1,4 +1,3 @@
-const sveSerije = require("../data/serije.json");
 const Serija = require("../models/serija");
 const vratiSveSerije = async (req, res, next) => {
   const Serije = await Serija.find({});
@@ -8,7 +7,7 @@ const vratiSveSerije = async (req, res, next) => {
 
 const vratiSerijuPoNazivu = async (req, res, next) => {
   const { naziv } = req.params;
-  const serija = sveSerije.filter((serija) =>
+  const serija = Serija.filter((serija) =>
     new RegExp(naziv, "i").exec(serija.name)
   );
   if (serija.length === 0) {
@@ -21,8 +20,8 @@ const vratiSerijuPoNazivu = async (req, res, next) => {
 const vratiOpisSerije = async (req, res, next) => {
   let naziv = req.params.naziv;
   let reply;
-  for (let i = 0; i < sveSerije.length; i++) {
-    let obj = sveSerije[i];
+  for (let i = 0; i < Serija.length; i++) {
+    let obj = Serija[i];
     console.log(obj.name, naziv);
     if (obj.name === naziv) {
       reply = {
@@ -41,8 +40,8 @@ const vratiOpisSerije = async (req, res, next) => {
 const vratiEpizodeSerije = async (req, res, next) => {
   let naziv = req.params.naziv;
   let reply;
-  for (let i = 0; i < sveSerije.length; i++) {
-    let obj = sveSerije[i];
+  for (let i = 0; i < Serija.length; i++) {
+    let obj = Serija[i];
     console.log(obj.name, naziv);
     if (obj.name === naziv) {
       reply = {
@@ -58,18 +57,6 @@ const vratiEpizodeSerije = async (req, res, next) => {
   res.status(200).send(reply);
 };
 const dodajSeriju = async (req, res, next) => {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    plot: Joi.string().required(),
-    episodes: Joi.number().required(),
-  });
-  console.log(req.body);
-  const result = schema.validate(req.body);
-  console.log(result);
-  if (result.error) {
-    res.status(400).send(result.error.details[0].message);
-    return;
-  }
   const serija = {
     name: req.body.name,
     plot: req.body.plot,

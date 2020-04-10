@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
-
+const { validacija } = require("../middlewares/validation/validation");
 const Glumci = require("../controllers/glumci");
-
+const {
+  dodajGlumcaSchema,
+  izmeniGlumcaSchema,
+} = require("../middlewares/validation/schemas/glumci");
 const {
   vratiSveGlumce,
   vratiGlumcaPoImenuIPrezimenu,
@@ -13,13 +16,17 @@ const {
   azurirajGlumca,
 } = Glumci;
 
-router.route("/").get(vratiSveGlumce).post(dodajGlumca);
+router
+  .route("/")
+  .get(vratiSveGlumce)
+  .post(validacija(dodajGlumcaSchema), dodajGlumca);
 router
   .route("/:id")
   .get(vratiGlumcaPoImenuIPrezimenu)
+  .put(validacija(dodajGlumcaSchema), azurirajGlumca)
   .delete(izbrisiGlumca)
-  .patch(azurirajGlumca);
+  .patch(validacija(izmeniGlumcaSchema), azurirajGlumca);
 router.get("/:id/nagrade", vratiNagradeGlumca);
-router.get("/:id/filmoviglumaca", vratiFilmoveGlumca);
+router.get("/:id/filmovi", vratiFilmoveGlumca);
 
 module.exports = router;

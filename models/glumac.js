@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const glumac = new Schema({
   name: String,
   rating: Number,
+  age: Number,
   image_path: Number,
   objectID: String,
   movies: [String],
